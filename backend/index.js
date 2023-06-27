@@ -48,7 +48,7 @@ app.post("/login", (req, res) => {
       expiresIn: "5s",
     });
     const refreshToken = jwt.sign(user, "refreshKey", {
-      expiresIn: "7d",
+      expiresIn: "7s",
     });
 
     const cookie = res.cookie("refreshToken", refreshToken, {
@@ -67,6 +67,13 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
+  res.cookie("refreshToken", "", {
+    maxAge: 0,
+    sameSite: "none",
+    secure: true,
+    httpOnly: true,
+  });
+
   return res.status(200).send("Logged out");
 });
 
